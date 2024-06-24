@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Bootstrap Example</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+
+    <!-- Custom styles for this template -->
+    <link href="css/navbar-fixed-top.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Fixed navbar -->
+    <nav class="navbar navbar-default navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="index.html">CSM3103</a>
+            </div>
+            <div id="navbar" class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="about.html">About</a></li> 
+                </ul>
+            </div><!--/.nav-collapse -->
+        </div>
+    </nav>
+
+    <div class="container custom-container">
+        <div class="row">
+            <div class="col-md-12"> 
+                <div id="staff-details"></div>
+            </div>
+        </div>
+    </div>
+
+    <nav class="navbar navbar-default navbar-fixed-bottom">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    Front End Programming &copy;2022
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <script src="js/jquery-3.2.1.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script>
+
+        $(document).ready(function() {
+            var urlParams = new URLSearchParams(window.location.search);
+            var employeeNumber = urlParams.get('id');
+
+            if (employeeNumber) {
+                $.ajax({
+                    url: 'https://kerbau.odaje.biz/getstaffbyid.php',
+                    method: 'GET',
+                    data: { id: employeeNumber },
+                    success: function(response) {
+                        var data = JSON.parse(response);
+                        if (data[0].status === 0) {
+                            $('#staff-details').html('<p>No data found for the given employee number.</p>');
+                        } else {
+                            var employee = JSON.parse(data[1]);
+                            var detailsHtml = `
+                                <div class="table-responsive">
+                                    <table class="table table-bordered">
+                                        <tr>
+                                            <th>Employee Number</th>
+                                            <td>${employee.employeeNumber}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>First Name</th>
+                                            <td>${employee.firstName}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Last Name</th>
+                                            <td>${employee.lastName}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Extension</th>
+                                            <td>${employee.extension}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Email</th>
+                                            <td>${employee.email}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Office Code</th>
+                                            <td>${employee.officeCode}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Reports To</th>
+                                            <td>${employee.reportsTo}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Job Title</th>
+                                            <td>${employee.jobTitle}</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            `;
+                            $('#staff-details').html(detailsHtml);
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error fetching staff details:', error);
+                    }
+                });
+            } else {
+                $('#staff-details').html('<p>Invalid employee number.</p>');
+            }
+        });
+    </script>
+</body>
+</html>

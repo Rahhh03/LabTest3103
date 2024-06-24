@@ -1,0 +1,21 @@
+body {
+  min-height: 2000px;
+  padding-top: 70px;
+}
+
+.custom-container {
+  background-color: #f8f8f8;   
+  padding: 20px 20px;
+}
+
+.list-group-item {
+  border: none;
+}
+
+.list-group-item-white {
+  background-color: #fff; 
+}
+
+.list-group-item-custom {
+  background-color: #f8f8f8; 
+}
